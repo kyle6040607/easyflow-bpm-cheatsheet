@@ -7,7 +7,7 @@ BPM（EFGP）表單常用 function 集合。
 1. **只複製需要的 function** 貼到表單 JS，不用整份貼。
 2. 貼之前先在表單內搜尋有沒有**同名 function**，避免重複定義（後定義的會蓋掉前面的）。
 3. 有些 function 會呼叫其他 function 或需要引用外部 JS，貼的時候要一起帶上，見下方〈相依性〉。
-4. 標準的 Grid 新增 / 修改 / 刪除按鈕寫法見 [FormTemplate.js](FormTemplate.js)。
+
 
 ## 相依性
 
