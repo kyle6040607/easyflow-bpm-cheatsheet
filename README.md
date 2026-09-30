@@ -1,4 +1,4 @@
-# BPMCommon.js
+# Easy Flow Common
 
 BPM（EFGP）表單常用 function 集合。
 
