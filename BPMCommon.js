@@ -213,7 +213,7 @@ function resetCss(pId) {
 //==================================== 3. Grid 單身 ====================================//
 
 /*
- * Grid 物件名稱 = Grid代號 + "Obj"，例如 Grid代號 gridMM020 → gridMM020Obj
+ * Grid 物件名稱 = Grid代號 + "Obj"，例如 Grid代號 gridDetail → gridDetailObj
  *
  *   gridObj.addRow();              新增一筆（把繫結欄位的值加進 Grid）
  *   gridObj.editRow();             修改選取的那筆
@@ -234,7 +234,7 @@ function resetCss(pId) {
  */
 
 //formOpen 時把隱藏欄位存的 Grid 資料載回 Grid
-//例：reloadGridData('gridMM020');
+//例：reloadGridData('gridDetail');
 function reloadGridData(id) {
   var hdnGridData = document.getElementById(id).value;
   if (hdnGridData != "") {
@@ -244,7 +244,7 @@ function reloadGridData(id) {
 }
 
 //重新編排項次 1,2,3...（刪除資料後常用）
-//例：refreshGridItem("gridMM020", "serialNo");
+//例：refreshGridItem("gridDetail", "serialNo");
 function refreshGridItem(pGridId, pColumn) {
   var pGridData = eval(pGridId + "Obj").getData();
   for (var r = 0; r < pGridData.length; r++) {
@@ -267,7 +267,7 @@ function gridSum(pGridId, pColumn) {
 }
 
 //檢查 Grid 某個欄位有沒有重複值，回傳重複的值陣列，沒重複回傳 []
-//例：var tDup = gridDuplicate("gridMM020", "MATNR");
+//例：var tDup = gridDuplicate("gridDetail", "MATNR");
 //    if (tDup.length > 0) { tMsg += "料號重複：" + tDup.join(",") + "\n"; }
 function gridDuplicate(pGridId, pColumn) {
   var tData = eval(pGridId + "Obj").getData();
@@ -301,7 +301,7 @@ function gridValueExists(pGridId, pColumn, pValue) {
 
 //Grid 資料依條件上色
 //例：收貨數量為空或 0 的列變黃色
-//  gridRowColor("gridMM020", function(row){ return row.MENGE1 == '' || row.MENGE1 == '0'; }, "#FFFF33");
+//  gridRowColor("gridDetail", function(row){ return row.MENGE1 == '' || row.MENGE1 == '0'; }, "#FFFF33");
 function gridRowColor(pGridId, pCondition, pColor) {
   var tGridObj = eval(pGridId + "Obj");
   var tData = tGridObj.getData();
@@ -314,7 +314,7 @@ function gridRowColor(pGridId, pCondition, pColor) {
 
 //用 key 比對兩個 Grid，把來源 Grid 的欄位寫回目標 Grid
 //mergeFieldObj 格式：{'目標欄位': '來源欄位'}
-//例：mergeGridData("gridMM020", "MATNR", "IT_OUTPUT", "MATNR", {'EBELN': 'EBELN', 'EBELP': 'EBELP'});
+//例：mergeGridData("gridDetail", "MATNR", "IT_OUTPUT", "MATNR", {'EBELN': 'EBELN', 'EBELP': 'EBELP'});
 function mergeGridData(targetGridId, targetGridField, sourceGridId, sourceGridIdField, mergeFieldObj) {
   var targetGridData = eval(targetGridId + "Obj").getData();
   var sourceGridData = eval(sourceGridId + "Obj").getData();
@@ -473,7 +473,7 @@ function toSapDate(pStr) {
 //需引用 ajax_DatabaseAccessor.js
 
 //直接下 SQL，回傳二維陣列 [[欄1, 欄2], ...]，查無資料回傳 []
-//pDBId：系統管理工具的資料來源代號，例如 'EFGP'、'HCP'
+//pDBId：系統管理工具的資料來源代號，例如 'EFGP'、'ERP'
 //例：
 //  var tRows = queryBySql('EFGP', "select id, userName from Users where id = '" + userId + "'");
 //  if (tRows.length > 0) { txtApplierName.value = tRows[0][1]; }
@@ -492,7 +492,7 @@ function queryBySql(pDBId, pSql) {
 
 //使用 SQL 註冊器，SQL 裡用 ? 當參數
 //pParamTypes：12 = 字串(VARCHAR)、4 = 整數、3 = 小數
-//例：var tRows = queryBySqlId("zCheckMATNR", [tStore, tMATNR], [12, 12]);
+//例：var tRows = queryBySqlId("zCheckMaterial", [tStore, tMATNR], [12, 12]);
 function queryBySqlId(pSqlId, pParams, pParamTypes) {
   var tResult = [];
   DWREngine.setAsync(false);
@@ -526,7 +526,7 @@ function isNewForm() {
 }
 
 //登入者是否在某個群組
-//例：if (userId == 'administrator' || isInGroup('A01')) { SubTab32Obj.show(); }
+//例：if (userId == 'administrator' || isInGroup('G001')) { SubTab32Obj.show(); }
 function isInGroup(pGroupId) {
   var tSql = "select A.id from Users A " +
              " inner join Group_User B on A.OID = B.UserOID " +
@@ -589,11 +589,11 @@ function checkPointOnClose(pReturnId) {
 //pColumns : 開窗要顯示的欄位 [{field: '欄位', label: '標題'}, ...]
 //pOnSelect: 點選某一列後執行 function(pRow)，pRow 為該列完整資料
 //例：
-//  openDataWin(TABLE_PRICEObj.getData(),
-//    [{field: 'FLIEF', label: 'Vendor'}, {field: 'FLIEF_N', label: 'Vendor Name'}, {field: 'INTAXPR_1', label: 'Price'}],
+//  openDataWin(ET_PRICEObj.getData(),
+//    [{field: 'LIFNR', label: 'Vendor'}, {field: 'LIFNR_NAME', label: 'Vendor Name'}, {field: 'PRICE', label: 'Price'}],
 //    function (pRow) {
-//      document.getElementById("suppiler").value = pRow.FLIEF + "_" + pRow.FLIEF_N;
-//      document.getElementById("PriceWithTax").value = pRow.INTAXPR_1;
+//      document.getElementById("vendor").value = pRow.LIFNR + "_" + pRow.LIFNR_NAME;
+//      document.getElementById("price").value = pRow.PRICE;
 //    });
 function openDataWin(pData, pColumns, pOnSelect) {
   var tOld = document.getElementById("dataWinMask");
@@ -713,7 +713,8 @@ function btnExportExcel_onclick() {
 
   var tForm = document.forms[0];
   var tOriAction = tForm.action;
-  tForm.action = "/zCustomExcelServlet/ExportExcelFileServlet.excel?hdnFunction=hdnGridData" +
+  //servlet 路徑依各環境自訂的匯出程式修改
+  tForm.action = "/yourExcelServlet/ExportExcelFileServlet.excel?hdnFunction=hdnGridData" +
                  "&hdnLabel=hdnLabelName&hdnFileName=hdnExportFileName&hdnSQL=hdnRequest_SQL";
   tForm.method = "post";
   tForm.submit();
@@ -743,7 +744,7 @@ function transGridToArrayString(pGridId, pHdnGridId, pColumnIds) {
 //==================================== 10. 其他 ====================================//
 
 //開啟另一張表單的追蹤畫面
-//例：openTraceForm("MM020", "流程OID");
+//例：openTraceForm("FORM002", "流程OID");
 function openTraceForm(pFormId, pProcessInstOID) {
   var tURL = "/NaNaWeb/GP/WMS/TraceProcess/TraceProcessForSearchForm?hdnMethod=searchSingleFormDetail" +
              "&hdnFormDefId=" + pFormId +
@@ -753,7 +754,7 @@ function openTraceForm(pFormId, pProcessInstOID) {
   window.open(tURL, "Form", "height=600,width=800");
 }
 
-//Grid 按鈕文字改英文（英國表單用）
+//Grid 按鈕文字改英文（英文介面表單用）
 //例：setGridButtonText("grid");
 function setGridButtonText(pGridId) {
   document.getElementById(pGridId + "_add").innerText = 'Add';
@@ -766,15 +767,15 @@ function setGridButtonText(pGridId) {
 
 /*
  * 前置設定（系統管理工具 →「SAP欄位整合設定」）
- *   整合設定代號：程式呼叫用的 ID，例如 callZMM_MATERIAL_PRICEANDLIFNR
+ *   整合設定代號：程式呼叫用的 ID，例如 callZMM_GET_PRICE
  *   1.RFC        ：SAP Function 名稱，要和 SAP 完全一致（請 SAP 人員確認）
- *   2.連線主機   ：例如 SAPRFC
- *   3.表單名稱   ：要呼叫的表單，例如 UKPO001
+ *   2.連線主機   ：例如 SAP_HOST
+ *   3.表單名稱   ：要呼叫的表單，例如 FORM001
  *   Import / Export：
  *     tableId  = 表單上的 Grid 代號（表單要有這個 Grid，可隱藏）
  *     SAP欄位  = RFC 參數欄位名稱，照規格書，拼錯會抓不到值
  *     表單欄位 = Grid 裡的欄位代號（程式 reload / getData 用這個名稱）
- *     固定值   = 每次都傳一樣的值（例如採購組織 5000），程式不用再給
+ *     固定值   = 每次都傳一樣的值（例如採購組織 1000），程式不用再給
  *
  * 呼叫方式：connectionToSap("整合設定代號");
  *   同步執行：呼叫前先把 Import Grid reload 好，呼叫完下一行就能 getData() 讀 Export Grid
@@ -794,9 +795,9 @@ function setGridButtonText(pGridId) {
 //pExportGridId : Export Grid代號
 //回傳 null = 表單上找不到 Grid（會 alert）；[] = SAP 沒有回傳資料
 //例：
-//  var tPrice = callSapRfc("callZMM_MATERIAL_PRICEANDLIFNR",
-//                          {"TABLE_MATERIAL": [{itemCode: "50MF100231", itemName: ""}]},
-//                          "TABLE_PRICE");
+//  var tPrice = callSapRfc("callZMM_GET_PRICE",
+//                          {"IT_MATERIAL": [{itemCode: "MAT0001", itemName: ""}]},
+//                          "ET_PRICE");
 //  if (tPrice == null) { return; }
 //  if (tPrice.length == 0) { alert("No data found in SAP."); return; }
 function callSapRfc(pSapId, pImportGrids, pExportGridId) {
@@ -823,13 +824,13 @@ function callSapRfc(pSapId, pImportGrids, pExportGridId) {
 
 /*
  * 完整範例：按下按鈕 → 呼叫 SAP → 開窗選擇 → 帶回欄位
- * （UKPO001 取得料號之價格及供應商，RFC 規格書：乾杯英國_EIP取得料號之價格及供應商RFC_功能規格書 v3.0）
+ * （FORM001 取得料號之價格及供應商）
  *
  * 還沒有 RFC 時把 SAP_MOCK 設 true，用假資料先測開窗與帶值；RFC 設定好後改 false
  *
 var SAP_MOCK = false;
 
-function Select_Suppiler_onclick() {
+function btnSelectVendor_onclick() {
   var tMATNR = document.getElementById("itemCode").value.trim();
   if (tMATNR == "") {
     alert("Please enter Material No. first.");
@@ -839,14 +840,14 @@ function Select_Suppiler_onclick() {
   var tPrice;
   if (SAP_MOCK) {
     tPrice = [
-      {FLIEF: '0000100001', FLIEF_N: 'Mock Vendor A Ltd', INFNR: '5300000001', WAERS: 'GBP', INTAXPR_1: '14.40000'},
-      {FLIEF: '0000100002', FLIEF_N: 'Mock Vendor B Ltd', INFNR: '5300000002', WAERS: 'GBP', INTAXPR_1: '11.50000'}
+      {LIFNR: '0000100001', LIFNR_NAME: 'Mock Vendor A Ltd', INFNR: '5300000001', WAERS: 'USD', PRICE: '14.40000'},
+      {LIFNR: '0000100002', LIFNR_NAME: 'Mock Vendor B Ltd', INFNR: '5300000002', WAERS: 'USD', PRICE: '11.50000'}
     ];
   } else {
     //EKORG / WERKS 在整合設定用固定值帶入，這裡只給料號
-    tPrice = callSapRfc("callZMM_MATERIAL_PRICEANDLIFNR",
-                        {"TABLE_MATERIAL": [{itemCode: tMATNR, itemName: ""}]},
-                        "TABLE_PRICE");
+    tPrice = callSapRfc("callZMM_GET_PRICE",
+                        {"IT_MATERIAL": [{itemCode: tMATNR, itemName: ""}]},
+                        "ET_PRICE");
     if (tPrice == null) {
       return;
     }
@@ -858,24 +859,24 @@ function Select_Suppiler_onclick() {
 
   openDataWin(tPrice,
     [
-      {field: 'FLIEF',     label: 'Vendor'},
-      {field: 'FLIEF_N',   label: 'Vendor Name'},
+      {field: 'LIFNR',     label: 'Vendor'},
+      {field: 'LIFNR_NAME',   label: 'Vendor Name'},
       {field: 'INFNR',     label: 'Info Record'},
       {field: 'WAERS',     label: 'Currency'},
-      {field: 'INTAXPR_1', label: 'Unit Price (Tax Incl.)'}
+      {field: 'PRICE', label: 'Unit Price (Tax Incl.)'}
     ],
     function (pRow) {
-      document.getElementById("suppiler").value = pRow.FLIEF + "_" + pRow.FLIEF_N;
-      document.getElementById("currency_2").value = pRow.WAERS;
-      document.getElementById("PriceWithTax").value = pRow.INTAXPR_1;
+      document.getElementById("vendor").value = pRow.LIFNR + "_" + pRow.LIFNR_NAME;
+      document.getElementById("currency").value = pRow.WAERS;
+      document.getElementById("price").value = pRow.PRICE;
     });
 }
 
 //按鈕綁定（formOpen 內），onclick 後面不能加括號，不然開表單就會直接執行
 function formOpen() {
-  var tBtn = document.getElementById("Select_Suppiler");
+  var tBtn = document.getElementById("btnSelectVendor");
   if (tBtn) {
-    tBtn.onclick = Select_Suppiler_onclick;
+    tBtn.onclick = btnSelectVendor_onclick;
   }
   return true;
 }
