@@ -85,7 +85,7 @@ function formSave() {
 
 ### 3. Grid 單身
 
-Grid 物件名稱 = Grid 代號 + `Obj`（例如 `gridMM020` → `gridMM020Obj`）。
+Grid 物件名稱 = Grid 代號 + `Obj`（例如 `gridDetail` → `gridDetailObj`）。
 
 | Function | 說明 |
 |---|---|
@@ -165,9 +165,9 @@ Grid 物件名稱 = Grid 代號 + `Obj`（例如 `gridMM020` → `gridMM020Obj`�
 | `callSapRfc(pSapId, pImportGrids, pExportGridId)` | 呼叫 SAP RFC，回傳 Export Grid 資料；`null` = 找不到 Grid，`[]` = SAP 無資料 |
 
 ```js
-var tPrice = callSapRfc("callZMM_MATERIAL_PRICEANDLIFNR",
-                        {"TABLE_MATERIAL": [{itemCode: "50MF100231", itemName: ""}]},
-                        "TABLE_PRICE");
+var tPrice = callSapRfc("callZMM_GET_PRICE",
+                        {"IT_MATERIAL": [{itemCode: "MAT0001", itemName: ""}]},
+                        "ET_PRICE");
 if (tPrice == null) { return; }
 if (tPrice.length == 0) { alert("No data found in SAP."); return; }
 ```
